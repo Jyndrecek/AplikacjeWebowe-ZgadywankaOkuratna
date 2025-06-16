@@ -1,88 +1,139 @@
-<div>
-  <h2>Zgadywanie Liczby 🎲</h2>
-  <p>Komputer wybrał liczbę od 1 do 100. Spróbuj zgadnąć!</p>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zgadywanie Liczby</title>
 
-  <!-- Pole do wpisywania liczby -->
-  <input type="number" id="guessInput" min="1" max="100" />
-
-  <!-- Przycisk do sprawdzenia zgadywanej liczby -->
-  <button id="guessBtn">Zgaduj</button>
-
-  <!-- Przycisk do resetowania gry -->
-  <button id="resetBtn">Resetuj</button>
-
-  <!-- Miejsce do wyświetlania komunikatów (np. podpowiedzi) -->
-  <div id="message"></div>
-</div>
-
-<script>
-  (function() {
-    // Pobieramy elementy z DOM
-    const guessInput = document.getElementById('guessInput');  // Pole input
-    const guessBtn = document.getElementById('guessBtn');      // Przycisk "Zgaduj"
-    const resetBtn = document.getElementById('resetBtn');      // Przycisk "Resetuj"
-    const message = document.getElementById('message');        // Div z komunikatami
-
-    let secretNumber; // Przechowuje wylosowaną liczbę
-    let attempts;     // Liczba prób użytkownika
-
-    // Funkcja rozpoczynająca nową grę
-    function startGame() {
-      // Losujemy liczbę od 1 do 100
-      secretNumber = Math.floor(Math.random() * 100) + 1;
-      attempts = 0;             // Zerujemy licznik prób
-      message.textContent = ''; // Czyscimy komunikaty
-      guessInput.value = '';    // Czyscimy pole input
-      guessInput.disabled = false; // Włączamy pole input
-      guessBtn.disabled = false;   // Włączamy przycisk zgadywania
-      guessInput.focus();           // Ustawiamy fokus na pole input
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f2f2f2, #e6f0ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
 
-    // Funkcja sprawdzająca zgadywaną liczbę
-    function checkGuess() {
-      const guess = Number(guessInput.value); // Pobieramy i zamieniamy na liczbę
-
-      // Sprawdzamy, czy liczba jest w zakresie 1-100
-      if (!guess || guess < 1 || guess > 100) {
-        message.textContent = '❗ Podaj liczbę od 1 do 100!';
-        return; // Kończymy funkcję, jeśli warunek nie jest spełniony
-      }
-
-      attempts++; // Zwiększamy licznik prób
-
-      if (guess === secretNumber) {
-        // Trafiona liczba!
-        message.textContent = `🎉 Brawo! Zgadłeś liczbę w ${attempts} próbach!`;
-
-        // Wyłączamy pole i przycisk, bo gra się skończyła
-        guessInput.disabled = true;
-        guessBtn.disabled = true;
-      } else if (guess < secretNumber) {
-        // Podpowiadamy, że liczba jest za mała
-        message.textContent = '🔼 Za mało, spróbuj większą liczbę.';
-      } else {
-        // Podpowiadamy, że liczba jest za duża
-        message.textContent = '🔽 Za dużo, spróbuj mniejszą liczbę.';
-      }
-
-      guessInput.value = ''; // Czyścimy pole po każdej próbie
-      guessInput.focus();    // Ustawiamy fokus z powrotem na input
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 320px;
+      text-align: center;
     }
 
-    // Obsługa kliknięcia przycisku "Zgaduj"
-    guessBtn.addEventListener('click', checkGuess);
+    h2 {
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
 
-    // Obsługa wciśnięcia klawisza Enter w polu input
-    guessInput.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        checkGuess();
+    p {
+      color: #666;
+      margin-bottom: 1rem;
+    }
+
+    input[type="number"] {
+      padding: 0.6rem;
+      font-size: 1rem;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      margin: 0.3rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #357abd;
+    }
+
+    #message {
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Zgadywanie Liczby 🎲</h2>
+    <p>Komputer wybrał liczbę od 1 do 100. Spróbuj zgadnąć!</p>
+
+    <input type="number" id="guessInput" min="1" max="100" />
+    <br />
+    <button id="guessBtn">Zgaduj</button>
+    <button id="resetBtn">Resetuj</button>
+
+    <div id="message"></div>
+  </div>
+
+  <script>
+    (function () {
+      const guessInput = document.getElementById('guessInput');
+      const guessBtn = document.getElementById('guessBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const message = document.getElementById('message');
+
+      let secretNumber;
+      let attempts;
+
+      function startGame() {
+        secretNumber = Math.floor(Math.random() * 100) + 1;
+        attempts = 0;
+        message.textContent = '';
+        guessInput.value = '';
+        guessInput.disabled = false;
+        guessBtn.disabled = false;
+        guessInput.focus();
       }
-    });
 
-    // Obsługa przycisku "Resetuj" - zaczynamy nową grę
-    resetBtn.addEventListener('click', startGame);
+      function checkGuess() {
+        const guess = Number(guessInput.value);
 
-    // Startujemy grę przy załadowaniu skryptu
-    startGame();
-  })();
-</script>
+        if (!guess || guess < 1 || guess > 100) {
+          message.textContent = '❗ Podaj liczbę od 1 do 100!';
+          return;
+        }
+
+        attempts++;
+
+        if (guess === secretNumber) {
+          message.textContent = `🎉 Brawo! Zgadłeś liczbę w ${attempts} próbach!`;
+          guessInput.disabled = true;
+          guessBtn.disabled = true;
+        } else if (guess < secretNumber) {
+          message.textContent = '🔼 Za mało, spróbuj większą liczbę.';
+        } else {
+          message.textContent = '🔽 Za dużo, spróbuj mniejszą liczbę.';
+        }
+
+        guessInput.value = '';
+        guessInput.focus();
+      }
+
+      guessBtn.addEventListener('click', checkGuess);
+      guessInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          checkGuess();
+        }
+      });
+      resetBtn.addEventListener('click', startGame);
+
+      startGame();
+    })();
+  </script>
+</body>
+</html>
